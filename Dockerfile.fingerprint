@@ -1,0 +1,3 @@
+ARG image=scratch
+FROM $image
+label com.github.kfox1111.fingerprint=$fingerprint
