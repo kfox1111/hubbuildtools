@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-IMAGE="$1"
+IMAGE=$(echo "$1" | sed 's/.*docker.io\///')
 TAG="$2"
 
 echo Fetching fingerprint for image: $IMAGE
