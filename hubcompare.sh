@@ -2,9 +2,12 @@
 set -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 
+. "$DIR"/common.sh
+
 IMAGE="$1"
 TAG="$2"
-FINGERPRINT="$3"
+LOCALIMAGE="$3"
+FINGERPRINT=$(docker inspect "$LOCALIMAGE" | jq -r '.[].ContainerConfig.Labels."com.github.kfox1111.fingerprint"')
 
 OFP=$($DIR/hubcurlfingerprint.sh "$IMAGE" "$TAG")
 

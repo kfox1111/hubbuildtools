@@ -1,14 +1,13 @@
 #!/bin/bash
 set -e
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
+
+. "$DIR"/common.sh
 
 IMAGE=$(echo "$1" | sed 's/.*docker.io\///')
 TAG="$2"
 
 #echo Fetching fingerprint for image: $IMAGE
-
-function jq () {
-  docker run -i --rm devorbitus/ubuntu-bash-jq-curl jq "$@"
-}
 
 TOKEN=$(curl -s -L "https://auth.docker.io/token?service=registry.docker.io&scope=repository:$IMAGE:pull" | jq -r .token)
 
