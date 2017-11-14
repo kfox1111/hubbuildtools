@@ -4,6 +4,8 @@ set -e
 IMAGE="$1"
 TAG="$2"
 
+echo Fetching fingerprint for image: $IMAGE
+
 alias jq="docker run -i --rm devorbitus/ubuntu-bash-jq-curl jq"
 
 TOKEN=$(curl -s -L "https://auth.docker.io/token\?service\=registry.docker.io\&scope\=repository:$IMAGE:pull" | jq -r .token)
