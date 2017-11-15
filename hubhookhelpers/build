@@ -13,14 +13,18 @@
 
 set -e
 
+set | grep -i TAG
+
 echo "Build hook running"
 docker build -t tmp$$:1 . "$@"
 
 if [ "x$PREFIX" == "x" ]; then
-        if [ "x$AUTO_PREFIX" == "rpm-version-release" ]; then
+        if [ "x$AUTO_PREFIX" == "xrpm-version-release" ]; then
                 PREFIX=$(docker run -i --rm tmp$$:1 rpm -q --queryformat '%{Version}-%{Release}' "$AUTO_PREFIX_PACKAGE")
         fi
 fi
+
+echo "PREFIX determined to be: $PREFIX"
 
 hubbuildtools/addfingerprint.sh tmp$$:1 tmp$$:2
 bash -x hubbuildtools/addrevision.sh tmp$$:2 "$DOCKER_REPO" "$CACHE_TAG" "$IMAGE_NAME" "$PREFIX"
