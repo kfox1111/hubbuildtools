@@ -13,7 +13,7 @@
 
 set -e
 
-set | grep -i TAG
+set | grep -i latest
 
 echo "Build hook running"
 docker build -t tmp$$:1 . "$@"
