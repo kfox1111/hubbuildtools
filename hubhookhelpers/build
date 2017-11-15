@@ -1,0 +1,29 @@
+#!/bin/bash
+# This script builds the container.
+# It adds a fingerprint and revision automatically.
+# You can pass extra arguments to the script to pass them to the docker build.
+# You can also:
+#   * prefix the generated tag by setting PREFIX
+#   * auto prefix via rpm version by setting:
+#     * AUTO_PREFIX="rpm-version-release" and AUTO_PREFIX_PACKAGE=<rpmname>
+# It needs the following variables set:
+#   * IMAGE_NAME - the full image name for the latest build.
+#   * CACHE_TAG - the tag the latest build will get.
+#   * DOCKER_REPO - the repo the builds will go into.
+
+set -e
+
+echo "Build hook running"
+docker build -t tmp$$:1 . "$@"
+
+if [ "x$PREFIX" == "x" ]; then
+        if [ "x$AUTO_PREFIX" == "rpm-version-release" ]; then
+                PREFIX=$(docker run -i --rm tmp$$:1 rpm -q --queryformat '%{Version}-%{Release}' "$AUTO_PREFIX_PACKAGE")
+        fi
+fi
+
+hubbuildtools/addfingerprint.sh tmp$$:1 tmp$$:2
+bash -x hubbuildtools/addrevision.sh tmp$$:2 "$DOCKER_REPO" "$CACHE_TAG" "$IMAGE_NAME" "$PREFIX"
+
+docker rmi tmp$$:1 tmp$$:2
+
