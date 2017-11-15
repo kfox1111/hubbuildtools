@@ -16,6 +16,11 @@ set -e
 echo "Build hook running"
 docker build -t tmp$$:1 . "$@"
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
+. $DIR/../common.sh
+
+setupjq
+
 if [ "x$PREFIX" == "x" ]; then
         if [ "x$AUTO_PREFIX" == "xrpm-version-release" ]; then
                 PREFIX=$(docker run -i --rm tmp$$:1 rpm -q --queryformat '%{Version}-%{Release}' "$AUTO_PREFIX_PACKAGE")
