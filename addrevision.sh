@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
-IMAGE="$1"
-TAG="$2"
-FINALIMAGE="$3"
-PREFIX="$4"
+REVSIONIMAGE="$1"
+IMAGE="$2"
+TAG="$3"
+FINALIMAGE="$4"
+PREFIX="$5"
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
-REVISION=$("$DIR/fetchnewrevision.sh" "$IMAGE" "$TAG" "$prefix")
-docker build --build-arg image="$revisionimage" --build-arg revision="$REVISION" -t "$FINALIMAGE" -f $DIR/Dockerfile.revision "$DIR"
+REVISION=$("$DIR/fetchnewrevision.sh" "$IMAGE" "$TAG" "$PREFIX")
+docker build --build-arg image="$REVISIONIMAGE" --build-arg revision="$REVISION" -t "$FINALIMAGE" -f $DIR/Dockerfile.revision "$DIR"
