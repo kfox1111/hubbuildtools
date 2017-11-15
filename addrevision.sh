@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-REVSIONIMAGE="$1"
+REVISIONIMAGE="$1"
 IMAGE="$2"
 TAG="$3"
 FINALIMAGE="$4"
