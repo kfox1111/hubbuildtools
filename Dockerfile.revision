@@ -1,0 +1,4 @@
+ARG image=scratch
+FROM $image
+ARG revision=NULL
+label com.github.kfox1111.revision=$revision
