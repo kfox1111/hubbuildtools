@@ -1,0 +1,12 @@
+#!/bin/bash
+# This script tags and pushes the revision named version.
+# It requires:
+#   * IMAGE_NAME - full name of latest image
+#   * DOCKER_REPO - repo in which the revisioned image will go.
+
+set -e
+
+REVISION=$(hubbuildtools/fetchlocalrevision.sh "$IMAGE_NAME")
+
+docker tag "$IMAGE_NAME" "$DOCKER_REPO:$REVISION"
+docker push "$DOCKER_REPO:$REVISION"

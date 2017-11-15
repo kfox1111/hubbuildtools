@@ -8,12 +8,10 @@
 #     * AUTO_PREFIX="rpm-version-release" and AUTO_PREFIX_PACKAGE=<rpmname>
 # It needs the following variables set:
 #   * IMAGE_NAME - the full image name for the latest build.
-#   * CACHE_TAG - the tag the latest build will get.
+#   * DOCKER_TAG - the tag the latest build will get.
 #   * DOCKER_REPO - the repo the builds will go into.
 
 set -e
-
-set | grep -i latest
 
 echo "Build hook running"
 docker build -t tmp$$:1 . "$@"
@@ -27,7 +25,12 @@ fi
 echo "PREFIX determined to be: $PREFIX"
 
 hubbuildtools/addfingerprint.sh tmp$$:1 tmp$$:2
-bash -x hubbuildtools/addrevision.sh tmp$$:2 "$DOCKER_REPO" "$CACHE_TAG" "$IMAGE_NAME" "$PREFIX"
+bash -x hubbuildtools/addrevision.sh tmp$$:2 "$DOCKER_REPO" "$DOCKER_TAG" "$IMAGE_NAME" "$PREFIX"
 
 docker rmi tmp$$:1 tmp$$:2
+
+# Fails if already uploaded to prevent a new version of the same contents
+# from landing.
+
+hubbuildtools/hubcompare.sh "$DOCKER_REPO" "$DOCKER_TAG" "$IMAGE_NAME"
 
