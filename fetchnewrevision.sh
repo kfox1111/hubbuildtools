@@ -4,7 +4,11 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 IMAGE="$1"
 TAG="$2"
 PREFIX="$3"
-CURRENT=$("$DIR"/hubcurlrevision.sh "$IMAGE" "$TAG")
+if [ "x$NEW_BUILD" != "x" ]; then
+	CURRENT=null
+else
+	CURRENT=$("$DIR"/hubcurlrevision.sh "$IMAGE" "$TAG")
+fi
 
 if [ "x$CURRENT" == "xnull" ]; then
 	if [ "x$PREFIX" != "x" ]; then

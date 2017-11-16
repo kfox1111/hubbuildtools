@@ -6,6 +6,8 @@
 #   * prefix the generated tag by setting PREFIX
 #   * auto prefix via rpm version by setting:
 #     * AUTO_PREFIX="rpm-version-release" and AUTO_PREFIX_PACKAGE=<rpmname>
+#   * NEW_BUILD=<anything> will force a new build reguardless of fingerprints.
+#       Used for bottstrapping.
 # It needs the following variables set:
 #   * IMAGE_NAME - the full image name for the latest build.
 #   * DOCKER_TAG - the tag the latest build will get.

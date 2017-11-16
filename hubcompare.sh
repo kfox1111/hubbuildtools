@@ -1,5 +1,11 @@
 #!/bin/bash
 set -e
+
+if [ "x$NEW_BUILD" != "x" ]; then
+	echo Forcing new build. Skipping fingerprint compare.
+	exit 0
+fi
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 
 . "$DIR"/common.sh
