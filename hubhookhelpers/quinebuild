@@ -11,4 +11,5 @@ docker run -p 6000:5000 --name quine-registry quine-registry
 
 #FIXME what prefix to use? we need it to be unique in the registry....
 docker pull localhost:6000:library/quine-registry
+docker rm -f quine-registry
 docker tag localhost:6000:library/quine-registry "$IMAGE_NAME"
