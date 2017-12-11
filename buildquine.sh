@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 # This script takes in a docker registry dump located in $(pwd)/registry
 # and outputs a quine script and data file in it.
