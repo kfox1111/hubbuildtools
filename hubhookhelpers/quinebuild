@@ -2,6 +2,8 @@
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 . $DIR/../common.sh
 
+${REGNAME:=library/registry}
+
 buildregistry
 $DIR/../buildquine.sh
 docker build -t quine-registry .
