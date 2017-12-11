@@ -14,10 +14,10 @@ function startregistry () {
 
 function buildregistry () {
   IMAGE=registry
-  FINALIMAGE=library/registry
+  PORT=5000
   docker pull registry
-  docker tag $IMAGE localhost:$PORT/$FINALIMAGE
-  docker push localhost:$PORT/$FINALIMAGE
+  docker tag $IMAGE localhost:$PORT/$REGNAME
+  docker push localhost:$PORT/$REGNAME
 }
 
 function stopregistry() {
