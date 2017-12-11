@@ -6,7 +6,7 @@
 # * set REGNAME to the registry name that the quine registry will be loaded into. Default
 #   library/registry
 
-${REGNAME:=library/registry}
+REGNAME=${REGNAME:=library/registry}
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 
