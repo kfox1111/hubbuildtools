@@ -6,7 +6,7 @@ REGNAME=${REGNAME:=library/registry}
 
 buildregistry
 $DIR/../buildquine.sh
-docker build -t quine-registry .
+docker build -t quine-registry -f $DIR/../Dockerfile.quine .
 docker run -p 6000:5000 -n quine-registry quine-registry
 
 #FIXME what prefix to use? we need it to be unique in the registry....
