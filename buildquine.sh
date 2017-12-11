@@ -9,6 +9,7 @@
 REGNAME=${REGNAME:=library/registry}
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
+. $DIR/common.sh
 
 rm -rf rawdata/
 mkdir -p rawdata
