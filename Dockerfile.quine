@@ -1,0 +1,2 @@
+FROM registry
+COPY quine data /

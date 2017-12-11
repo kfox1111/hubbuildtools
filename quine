@@ -1,0 +1,66 @@
+#!/bin/sh -xe
+
+tar -cvf /tmp/quine.tar /quine /data
+touch -d @$(stat -c "%Y" /data) /tmp/quine.tar
+DATASHA=$(sha256sum /tmp/quine.tar | awk '{print $1}')
+gzip /tmp/quine.tar
+touch -d @$(stat -c "%Y" /data) /tmp/quine.tar.gz
+
+cd /tmp
+tar -xvf /data
+. rawdata/settings
+
+cd /var/lib
+tar -xvf /tmp/rawdata/registry.tar
+rm  /tmp/rawdata/registry.tar
+cd /tmp
+
+DIRROOT=/var/lib/registry/docker
+DIRPREFIX="$DIRROOT/registry/v2/repositories/$REGNAME"
+
+DIFFSHA=$(sha256sum /tmp/quine.tar.gz | awk '{print $1}')
+DIFFSIZE=$(stat -c '%s' /tmp/quine.tar.gz)
+DIFFPREFIX=$(echo $DIFFSHA | cut -c1-2)
+
+mkdir -p /var/lib/registry/docker/registry/v2/blobs/sha256/$DIFFPREFIX/$DIFFSHA
+mv /tmp/quine.tar.gz /var/lib/registry/docker/registry/v2/blobs/sha256/$DIFFPREFIX/$DIFFSHA/data
+mkdir -p /var/lib/registry/docker/registry/v2/repositories/$REGNAME/_layers/sha256/$DIFFSHA
+echo -n sha256:$DIFFSHA > /var/lib/registry/docker/registry/v2/repositories/$REGNAME/_layers/sha256/$DIFFSHA/link
+
+sed "s/@DATASHA@/$DATASHA/g" rawdata/manifest1.json.tmpl > rawdata/manifest1.json
+touch -d @$(stat -c "%Y" /data) rawdata/manifest1.json
+
+MANIFESTSIZE=$(stat -c '%s' rawdata/manifest1.json)
+MANIFESTSUM=$(sha256sum rawdata/manifest1.json | awk '{print $1}')
+MANIFESTPREFIX=$(echo $MANIFESTSUM | cut -c1-2)
+mkdir -p "$DIRROOT/registry/v2/blobs/sha256/$MANIFESTPREFIX/$MANIFESTSUM"
+mv rawdata/manifest1.json "$DIRROOT/registry/v2/blobs/sha256/$MANIFESTPREFIX/$MANIFESTSUM/data"
+mkdir -p $DIRPREFIX/_layers/sha256/$MANIFESTSUM
+echo -n sha256:$MANIFESTSUM > $DIRPREFIX/_layers/sha256/$MANIFESTSUM/link
+
+sed 's/"@DIFFSIZE@"/'$DIFFSIZE/g rawdata/manifest2.json.tmpl > rawdata/manifest2.json
+sed -i "s/@DIFFSHA@/$DIFFSHA/g" rawdata/manifest2.json
+sed -i 's/"@MANIFESTSIZE@"/'$MANIFESTSIZE/g rawdata/manifest2.json
+sed -i "s/@MANIFESTSUM@/$MANIFESTSUM/g" rawdata/manifest2.json
+
+touch -d @$(stat -c "%Y" /data) rawdata/manifest2.json
+
+MANIFEST2SIZE=$(stat -c '%s' rawdata/manifest2.json)
+MANIFEST2SUM=$(sha256sum rawdata/manifest2.json | awk '{print $1}')
+MANIFEST2PREFIX=$(echo $MANIFEST2SUM | cut -c1-2)
+mkdir -p $DIRROOT/registry/v2/blobs/sha256/$MANIFEST2PREFIX/$MANIFEST2SUM
+mv rawdata/manifest2.json $DIRROOT/registry/v2/blobs/sha256/$MANIFEST2PREFIX/$MANIFEST2SUM/data
+
+DIR1=_manifests/revisions/sha256/$MANIFEST2SUM/
+DIR2=_manifests/tags/quine-latest/current/
+DIR3=_manifests/tags/quine-latest/index/sha256/$MANIFEST2SUM/
+
+mkdir -p $DIRPREFIX/$DIR1
+mkdir -p $DIRPREFIX/$DIR2
+mkdir -p $DIRPREFIX/$DIR3
+
+echo -n "sha256:$MANIFEST2SUM" > $DIRPREFIX/$DIR1/link
+echo -n "sha256:$MANIFEST2SUM" > $DIRPREFIX/$DIR2/link
+echo -n "sha256:$MANIFEST2SUM" > $DIRPREFIX/$DIR3/link
+
+registry serve /etc/docker/registry/config.yml
