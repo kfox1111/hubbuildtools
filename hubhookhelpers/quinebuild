@@ -10,7 +10,17 @@ $DIR/../buildquine.sh
 docker build -t quine-registry -f $DIR/../Dockerfile.quine .
 docker run -d -p 6000:5000 --name quine-registry quine-registry /quine
 
-#FIXME what prefix to use? we need it to be unique in the registry....
-docker pull localhost:6000:library/quine-registry
+end=$(date +%s)
+end=$((end + 180)) #3 min
+set +x
+while true; do
+    sleep 10
+    #The registry is not always emediately ready. Try for a bit to get it.
+    #FIXME what prefix to use? we need it to be unique in the registry....
+    docker pull localhost:6000:library/registry:quine-registry
+    now=$(date +%s)
+    [ $now -gt $end ] && echo failed to fetch container && exit -1
+done
+set -x
 docker rm -f quine-registry
-docker tag localhost:6000:library/quine-registry "$IMAGE_NAME"
+docker tag localhost:6000:library/registry:quine-registry "$IMAGE_NAME"
