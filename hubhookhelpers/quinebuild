@@ -17,7 +17,7 @@ while true; do
     sleep 10
     #The registry is not always emediately ready. Try for a bit to get it.
     #FIXME what prefix to use? we need it to be unique in the registry....
-    docker pull localhost:6000:library/registry:quine-registry
+    docker pull localhost:6000/$REGNAME:quine-latest
     [ $? -eq 0 ] && break
     now=$(date +%s)
     [ $now -gt $end ] && echo failed to fetch container && docker logs quine-registry && exit -1

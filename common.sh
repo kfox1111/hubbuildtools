@@ -14,7 +14,7 @@ function startregistry () {
 
 function buildregistry () {
   NAME=registry
-  IMAGE=registry
+  IMAGE=library/registry
   PORT=5000
   docker pull registry
   docker tag $IMAGE localhost:$PORT/$REGNAME
