@@ -23,5 +23,28 @@ while true; do
     [ $now -gt $end ] && echo failed to fetch container && docker logs quine-registry && exit -1
 done
 set -xe
+IMAGEID=$(docker images localhost:6000/library/registry:quine-latest --format '{{.ID}}')
 docker rm -f quine-registry
-docker tag localhost:6000:library/registry:quine-registry "$IMAGE_NAME"
+docker tag localhost:6000/$REGNAME:quine-latest "$IMAGE_NAME"
+
+docker rmi localhost:6000/$REGNAME:quine-latest
+
+docker run -d -p 6000:5000 --name quine-registry "$IMAGE_NAME" /quine
+end=$(date +%s)
+end=$((end + 180)) #3 min
+set +xe
+while true; do
+    sleep 10
+    #The registry is not always emediately ready. Try for a bit to get it.
+    #FIXME what prefix to use? we need it to be unique in the registry....
+    docker pull localhost:6000/$REGNAME:quine-latest
+    [ $? -eq 0 ] && break
+    now=$(date +%s)
+    [ $now -gt $end ] && echo failed to fetch container && docker logs quine-registry && exit -1
+done
+set -xe
+docker rm -f quine-registry
+
+IMAGEID2=$(docker images localhost:6000/library/registry:quine-latest --format '{{.ID}}')
+
+diff -u <(echo $IMAGEID) <(echo $IMAGEID2) && echo OK
