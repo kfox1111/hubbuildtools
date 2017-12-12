@@ -26,6 +26,7 @@ function buildregistry () {
     #The registry is not always emediately ready. Try for a bit to get it.
     #FIXME what prefix to use? we need it to be unique in the registry....
     docker push localhost:$PORT/$REGNAME
+    [ $? -eq 0 ] && break
     now=$(date +%s)
     [ $now -gt $end ] && echo failed to start container && docker logs $NAME && exit -1
   done
