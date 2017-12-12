@@ -8,7 +8,7 @@ buildregistry
 stopregistry
 $DIR/../buildquine.sh
 docker build -t quine-registry -f $DIR/../Dockerfile.quine .
-docker run -d -p 6000:5000 --name quine-registry quine-registry
+docker run -d -p 6000:5000 --name quine-registry quine-registry /quine
 
 #FIXME what prefix to use? we need it to be unique in the registry....
 docker pull localhost:6000:library/quine-registry
