@@ -7,7 +7,7 @@ function jq () {
 }
 
 function startregistry () {
-  NAME=registry-$$
+  NAME=registry
   PORT=5000
   docker run -d -p $PORT:5000 -v $(pwd)/registry:/var/lib/registry --name $NAME registry
 }
@@ -21,6 +21,6 @@ function buildregistry () {
 }
 
 function stopregistry() {
-  NAME=registry-$$
+  NAME=registry
   docker rm -f $NAME
 }
