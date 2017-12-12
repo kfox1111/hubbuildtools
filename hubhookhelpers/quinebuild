@@ -4,8 +4,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 
 REGNAME=${REGNAME:=library/registry}
 
-stopregistry
 buildregistry
+stopregistry
 $DIR/../buildquine.sh
 docker build -t quine-registry -f $DIR/../Dockerfile.quine .
 docker run -p 6000:5000 --name quine-registry quine-registry
