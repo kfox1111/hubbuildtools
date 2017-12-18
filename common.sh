@@ -2,8 +2,16 @@ function setupjq () {
   docker pull devorbitus/ubuntu-bash-jq-curl
 }
 
+function setupxmlstarlet () {
+  docker pull jakubsacha/docker-xmlstarlet
+}
+
 function jq () {
   docker run -i --rm devorbitus/ubuntu-bash-jq-curl jq "$@"
+}
+
+function xmlstarlet () {
+  docker run -i --rm jakubsacha/docker-xmlstarlet "$@"
 }
 
 function startregistry () {

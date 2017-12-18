@@ -11,3 +11,15 @@
 [ -x /usr/bin/rpm ] \
     && echo rpm \
     && (rpm -qa | sort)
+
+[ -x /sbin/apk ] \
+    && echo apk \
+    && (apk info -v | grep -v '^WARNING: ' | sort )
+
+if [ -d /data ]; \
+    files=$(ls /data/*.rpm 2> /dev/null | wc -l)
+    if [ $files -gt 0 ]; then
+        echo rpm-repo
+        ls /data/*.rpm | sed 's@^/data/@@; s@\.rpm$@@' | sort
+    fi
+fi
