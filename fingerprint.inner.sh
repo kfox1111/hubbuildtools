@@ -16,7 +16,7 @@
     && echo apk \
     && (apk info -v | grep -v '^WARNING: ' | sort )
 
-if [ -d /data ]; \
+if [ -d /data ]; then
     files=$(ls /data/*.rpm 2> /dev/null | wc -l)
     if [ $files -gt 0 ]; then
         echo rpm-repo
