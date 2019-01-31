@@ -49,6 +49,10 @@ if [ "x$PREFIX" == "x" ]; then
                 setupxmlstarlet
                 PREFIX=$(docker run -i --rm tmp$$:1 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="kubelet"]'  -m '_:version' -v '@ver' -o '-' -v '@rel' -n)
         fi
+	if [ "x$AUTO_PREFIX" != "x" -a "x$PREFIX" == "x" ]; then
+		echo "Failed to generate prefix for an unknown reason."
+		exit -1
+	fi
 fi
 
 echo "PREFIX determined to be: $PREFIX"
