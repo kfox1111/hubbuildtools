@@ -6,6 +6,8 @@
 #   * prefix the generated tag by setting PREFIX
 #   * auto prefix via rpm version by setting:
 #     * AUTO_PREFIX="rpm-version-release" and AUTO_PREFIX_PACKAGE=<rpmname>
+#   * auto prefix via apk version by setting:
+#     * AUTO_PREFIX="apk-version-release" and AUTO_PREFIX_PACKAGE=<apkname>
 #   * NEW_BUILD=<anything> will force a new build reguardless of fingerprints.
 #       Used for bottstrapping.
 # It needs the following variables set:
@@ -25,10 +27,19 @@ setupjq
 
 if [ "x$PREFIX" == "x" ]; then
         if [ "x$AUTO_PREFIX" == "xrpm-version" ]; then
-                PREFIX=$(docker run -i --rm tmp$$:1 rpm -q --queryformat '%{Version}' "$AUTO_PREFIX_PACKAGE")
+                PREFIX=$(docker run -i --rm --entrypoint='' tmp$$:1 rpm -q --queryformat '%{Version}' "$AUTO_PREFIX_PACKAGE")
         fi
         if [ "x$AUTO_PREFIX" == "xrpm-version-release" ]; then
-                PREFIX=$(docker run -i --rm tmp$$:1 rpm -q --queryformat '%{Version}-%{Release}' "$AUTO_PREFIX_PACKAGE")
+                PREFIX=$(docker run -i --rm --entrypoint='' tmp$$:1 rpm -q --queryformat '%{Version}-%{Release}' "$AUTO_PREFIX_PACKAGE")
+        fi
+        if [ "x$AUTO_PREFIX" == "xapk-version" ]; then
+                PREFIX=$(docker run -i --rm --entrypoint='' tmp$$:1 apk info "$AUTO_PREFIX_PACKAGE" 2>/dev/null | head -n 1 | awk '{print $1}')
+                PREFIX=${PREFIX#"$AUTO_PREFIX_PACKAGE-"}
+                PREFIX=$(echo "$PREFIX" | awk -F- '{print $1}')
+        fi
+        if [ "x$AUTO_PREFIX" == "xapk-version-release" ]; then
+                PREFIX=$(docker run -i --rm --entrypoint='' tmp$$:1 apk info "$AUTO_PREFIX_PACKAGE" 2>/dev/null | head -n 1 | awk '{print $1}')
+                PREFIX=${PREFIX#"$AUTO_PREFIX_PACKAGE-"}
         fi
         if [ "x$AUTO_PREFIX" == "xrpmrepo-version" ]; then
                 setupxmlstarlet
