@@ -45,14 +45,14 @@ if [ "x$PREFIX" == "x" ]; then
                 setupxmlstarlet
 		export tc="tmp$$:3"
 		docker build --build-arg image="tmp$$:1" -t "$tc" -f "$DIR/../Dockerfile.fingerprinthelper" "$DIR/.."
-                PREFIX=$(docker run -i --rm tmp$$:3 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="$AUTO_PREFIX_PACKAGE"]'  -m '_:version' -v '@ver' -n)
+                PREFIX=$(docker run -i --rm "$tc" /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="$AUTO_PREFIX_PACKAGE"]'  -m '_:version' -v '@ver' -n)
 		docker rmi "$tc"
         fi
         if [ "x$AUTO_PREFIX" == "xrpmrepo-version-release" ]; then
                 setupxmlstarlet
 		export tc="tmp$$:3"
 		docker build --build-arg image="tmp$$:1" -t "$tc" -f "$DIR/../Dockerfile.fingerprinthelper" "$DIR/.."
-                PREFIX=$(docker run -i --rm tmp$$:3 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="$AUTO_PREFIX_PACKAGE"]'  -m '_:version' -v '@ver' -o '-' -v '@rel' -n)
+                PREFIX=$(docker run -i --rm "$tc" /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="$AUTO_PREFIX_PACKAGE"]'  -m '_:version' -v '@ver' -o '-' -v '@rel' -n)
 		docker rmi "$tc"
         fi
 	if [ "x$AUTO_PREFIX" != "x" -a "x$PREFIX" == "x" ]; then
