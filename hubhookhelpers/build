@@ -43,11 +43,11 @@ if [ "x$PREFIX" == "x" ]; then
         fi
         if [ "x$AUTO_PREFIX" == "xrpmrepo-version" ]; then
                 setupxmlstarlet
-                PREFIX=$(docker run -i --rm tmp$$:1 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="kubelet"]'  -m '_:version' -v '@ver' -n)
+                PREFIX=$(docker run -i --rm tmp$$:1 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="$AUTO_PREFIX_PACKAGE"]'  -m '_:version' -v '@ver' -n)
         fi
         if [ "x$AUTO_PREFIX" == "xrpmrepo-version-release" ]; then
                 setupxmlstarlet
-                PREFIX=$(docker run -i --rm tmp$$:1 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="kubelet"]'  -m '_:version' -v '@ver' -o '-' -v '@rel' -n)
+                PREFIX=$(docker run -i --rm tmp$$:1 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="$AUTO_PREFIX_PACKAGE"]'  -m '_:version' -v '@ver' -o '-' -v '@rel' -n)
         fi
 	if [ "x$AUTO_PREFIX" != "x" -a "x$PREFIX" == "x" ]; then
 		echo "Failed to generate prefix for an unknown reason."
