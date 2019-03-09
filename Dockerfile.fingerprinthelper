@@ -1,0 +1,4 @@
+ARG image=scratch
+FROM $image
+FROM alpine
+COPY --from=0 /data /data
