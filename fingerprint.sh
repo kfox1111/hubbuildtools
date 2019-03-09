@@ -6,7 +6,7 @@ cleanup=0
 
 if [ "x$AUTO_PREFIX" == "xrpmrepo-version" -o "x$AUTO_PREFIX" == "xrpmrepo-version-release" ]; then
 	cleanup=1
-	docker build --build-arg image="$container" -t "fingerprint.$$" -f "$DIR/Dockerfile.fingerprinthelper" "$DIR"
+	docker build --build-arg image="$container" -t "fingerprint.$$" -f "$DIR/Dockerfile.fingerprinthelper" "$DIR" > /dev/null
 	container="fingerprint.$$"
 fi
 
