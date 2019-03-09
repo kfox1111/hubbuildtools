@@ -13,5 +13,5 @@ fi
 docker run -i --rm -v "$DIR/fingerprint.inner.sh":/fingerprint.sh --entrypoint /bin/sh "$container" /fingerprint.sh | bzip2 -c| base64 | tr '\n' '=' | sed 's/=//g'
 
 if [ $cleanup == 1 ]; then
-	docker rmi "$container"
+	docker rmi "$container" > /dev/null
 fi
