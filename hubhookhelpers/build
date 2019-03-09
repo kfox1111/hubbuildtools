@@ -43,13 +43,13 @@ if [ "x$PREFIX" == "x" ]; then
         fi
         if [ "x$AUTO_PREFIX" == "xrpmrepo-version" ]; then
                 setupxmlstarlet
-		docker build --build-arg image="tmp$$:3" -t "fingerprint.$$" -f "$DIR/../Dockerfile.fingerprinthelper" "$DIR/.."
+		docker build --build-arg image="tmp$$:1" -t "tmp$$:3" -f "$DIR/../Dockerfile.fingerprinthelper" "$DIR/.."
                 PREFIX=$(docker run -i --rm tmp$$:3 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="$AUTO_PREFIX_PACKAGE"]'  -m '_:version' -v '@ver' -n)
 		docker rmi "tmp$$:3"
         fi
         if [ "x$AUTO_PREFIX" == "xrpmrepo-version-release" ]; then
                 setupxmlstarlet
-		docker build --build-arg image="tmp$$:3" -t "fingerprint.$$" -f "$DIR/../Dockerfile.fingerprinthelper" "$DIR/.."
+		docker build --build-arg image="tmp$$:1" -t "tmp$$:3" -f "$DIR/../Dockerfile.fingerprinthelper" "$DIR/.."
                 PREFIX=$(docker run -i --rm tmp$$:3 /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="$AUTO_PREFIX_PACKAGE"]'  -m '_:version' -v '@ver' -o '-' -v '@rel' -n)
 		docker rmi "tmp$$:3"
         fi
