@@ -16,11 +16,17 @@
 #   * IMAGE_NAME - the full image name for the latest build.
 #   * DOCKER_TAG - the tag the latest build will get.
 #   * DOCKER_REPO - the repo the builds will go into.
+# If SUBBUILD is in the environment, it will be passed to the docker build as
+# an arg
 
 set -e
 
 echo "Build hook running"
-docker build -t tmp$$:1 . "$@"
+if [ "x$SUBBUILD" != "x" ]; then
+	docker build --build-arg "SUBBUILD=$SUBBUILD" -t tmp$$:1 . "$@"
+else
+	docker build -t tmp$$:1 . "$@"
+fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 . $DIR/../common.sh
