@@ -63,6 +63,12 @@ if [ "x$PREFIX" == "x" ]; then
                 PREFIX=$(docker run -i --rm "$tc" /bin/sh -c 'cat /data/repodata/*primary.xml.gz' | zcat -f | xmlstarlet sel -t -m '/_:metadata/_:package[_:name="'"$AUTO_PREFIX_PACKAGE"'"]'  -m '_:version' -v '@ver' -o '-' -v '@rel' -n)
 		docker rmi "$tc"
         fi
+        if [ "x$AUTO_PREFIX" == "xfilecontent" ]; then
+		export tc="tmp$$:3"
+		docker build --build-arg image="tmp$$:1" -t "$tc" -f "$DIR/../Dockerfile.fingerprinthelper" "$DIR/.."
+		PREFIX=$(docker run -i --rm "$tc" /bin/sh -c "cat $AUTO_PREFIX_FILE")
+		docker rmi "$tc"
+        fi
 	if [ "x$AUTO_PREFIX_FILTER" != "x" ]; then
 		PREFIX=$(echo "$PREFIX" | eval "$AUTO_PREFIX_FILTER")
         fi
