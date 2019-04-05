@@ -14,6 +14,10 @@ IMAGE="$1"
 TAG="$2"
 LOCALIMAGE="$3"
 FINGERPRINT=$(docker inspect "$LOCALIMAGE" | jq -r '.[].ContainerConfig.Labels."com.github.kfox1111.fingerprint"')
+if [ "x$FINGERPRINT" == "xnull" ]; then
+	# Docker changed where this lives in a newer version. :(
+	FINGERPRINT=$(docker inspect "$LOCALIMAGE" | jq -r '.[].Config.Labels."com.github.kfox1111.fingerprint"')
+fi
 
 OFP=$($DIR/hubcurlfingerprint.sh "$IMAGE" "$TAG")
 
