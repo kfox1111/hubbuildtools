@@ -23,9 +23,17 @@ set -e
 
 echo "Build hook running"
 if [ "x$SUBBUILD" != "x" ]; then
-	docker build --build-arg "SUBBUILD=$SUBBUILD" -t tmp$$:1 . "$@"
+	if [ "x$GPGKEY" != "x" ]; then
+		docker build --build-arg "SUBBUILD=$SUBBUILD" --secret "id=gpg,$GPGKEY" -t tmp$$:1 . "$@"
+	else
+		docker build --build-arg "SUBBUILD=$SUBBUILD" -t tmp$$:1 . "$@"
+	fi
 else
-	docker build -t tmp$$:1 . "$@"
+	if [ "x$GPGKEY" != "x" ]; then
+		docker build --secret "id=gpg,$GPGKEY" -t tmp$$:1 . "$@"
+	else
+		docker build -t tmp$$:1 . "$@"
+	fi
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
