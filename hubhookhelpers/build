@@ -24,13 +24,13 @@ set -e
 echo "Build hook running"
 if [ "x$SUBBUILD" != "x" ]; then
 	if [ "x$GPGKEY" != "x" ]; then
-		docker build --build-arg "SUBBUILD=$SUBBUILD" --secret "id=gpg,$GPGKEY" -t tmp$$:1 . "$@"
+		docker build --build-arg "SUBBUILD=$SUBBUILD" --no-cache --progress=plain --secret "id=gpg,src=$GPGKEY" -t tmp$$:1 . "$@"
 	else
 		docker build --build-arg "SUBBUILD=$SUBBUILD" -t tmp$$:1 . "$@"
 	fi
 else
 	if [ "x$GPGKEY" != "x" ]; then
-		docker build --secret "id=gpg,$GPGKEY" -t tmp$$:1 . "$@"
+		docker build --no-cache --progress=plain --secret "id=gpg,src=$GPGKEY" -t tmp$$:1 . "$@"
 	else
 		docker build -t tmp$$:1 . "$@"
 	fi
