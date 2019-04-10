@@ -12,7 +12,7 @@
     && echo rpm \
     && (rpm -qa | sort)
 
-[ -x /sbin/apk ] \
+[ -x /sbin/apk -a "x$FINGERPRINT_SKIP_ALPINE" = "x" ] \
     && echo apk \
     && (apk info -v | grep -v '^WARNING: ' | sort )
 
