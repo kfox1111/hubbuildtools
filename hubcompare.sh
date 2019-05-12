@@ -27,4 +27,4 @@ if [ "x$OFP" != "x$FINGERPRINT" -a "x$OFP" != "x" ]; then
 	exit 0
 fi
 echo Fingerprints are the same.
-exit 1
+exit 42
