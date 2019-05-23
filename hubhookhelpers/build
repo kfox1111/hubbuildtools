@@ -48,6 +48,9 @@ if [ "x$PREFIX" == "x" ]; then
         if [ "x$AUTO_PREFIX" == "xrpm-version-release" ]; then
                 PREFIX=$(docker run -i --rm --entrypoint='' tmp$$:1 rpm -q --queryformat '%{Version}-%{Release}' "$AUTO_PREFIX_PACKAGE")
         fi
+        if [ "x$AUTO_PREFIX" == "xpip-version" ]; then
+                PREFIX=$(docker run -i --rm --entrypoint='' tmp$$:1 pip show "$AUTO_PREFIX_PACKAGE" 2>/dev/null | awk '{if($1 == "Version:"){print $2}}')
+        fi
         if [ "x$AUTO_PREFIX" == "xapk-version" ]; then
                 PREFIX=$(docker run -i --rm --entrypoint='' tmp$$:1 apk info "$AUTO_PREFIX_PACKAGE" 2>/dev/null | head -n 1 | awk '{print $1}')
                 PREFIX=${PREFIX#"$AUTO_PREFIX_PACKAGE-"}
