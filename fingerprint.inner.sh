@@ -17,9 +17,9 @@
     && (apk info -v | grep -v '^WARNING: ' | sort )
 
 if [ -d /data ]; then
-    files=$(ls /data/*.rpm 2> /dev/null | wc -l)
+    files=$(find /data/ -name '*.rpm' 2> /dev/null | wc -l)
     if [ $files -gt 0 ]; then
         echo rpm-repo
-        ls /data/*.rpm | sed 's@^/data/@@; s@\.rpm$@@' | sort
+        find /data/ -name '*.rpm' | sed 's@^\([^/]*/\)\+@@g; s@\.rpm$@@' | sort
     fi
 fi
