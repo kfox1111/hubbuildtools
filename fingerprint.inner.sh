@@ -23,3 +23,8 @@ if [ -d /data ]; then
         find /data/ -name '*.rpm' | sed 's@^\([^/]*/\)\+@@g; s@\.rpm$@@' | sort
     fi
 fi
+
+if [ -f /.extrafingerprints ]; then
+    echo extra-fingerprints
+    cat /.extrafingerprints
+fi
