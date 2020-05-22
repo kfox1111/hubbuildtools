@@ -1,10 +1,10 @@
-#!/bin/bash
+#!/bin/bash -e
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )/" && pwd )"
 
 container="$1"
 cleanup=0
 
-if [ "x$AUTO_PREFIX" == "xrpmrepo-version" -o "x$AUTO_PREFIX" == "xrpmrepo-version-release" ]; then
+if [ "x$AUTO_PREFIX" == "xrpmrepo-version" -o "x$AUTO_PREFIX" == "xrpmrepo-version-release" -o "x$AUTO_PREFIX" == "xfilecontent" ]; then
 	cleanup=1
 	docker build --build-arg image="$container" -t "fingerprint.$$" -f "$DIR/Dockerfile.fingerprinthelper" "$DIR" > /dev/null
 	container="fingerprint.$$"
