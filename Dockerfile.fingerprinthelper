@@ -1,7 +1,8 @@
 ARG image=scratch
 FROM $image
-RUN touch /.extrafingerprints
+RUN touch /.extrafingerprinthack
 FROM alpine
 COPY --from=0 /data /data
-COPY --from=0 /.extrafingerprints /.extrafingerprints
+COPY --from=0 /.extrafingerprint* /
+RUN rm -f /.extrafingerprinthack
 ENV FINGERPRINT_SKIP_ALPINE=TRUE
