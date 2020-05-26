@@ -1,6 +1,6 @@
 ARG image=scratch
 FROM $image
-RUN touch /.extrafingerprinthack
+COPY extrafingerprinthelper /.extrafingerprinthack
 FROM alpine
 COPY --from=0 /data /data
 COPY --from=0 /.extrafingerprint* /
