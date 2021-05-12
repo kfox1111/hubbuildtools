@@ -21,7 +21,7 @@ else
 		echo $((CURRENT+1))
 	else
 		OLDPREFIX=$(echo "$CURRENT" | sed 's/^\(.*\)-[0-9]\+$/\1/')
-		OLDREVISION=$(echo "$CURRENT" | sed 's/^.*-\([0-9]\)\+$/\1/')
+		OLDREVISION=$(echo "$CURRENT" | sed 's/^.*-\([0-9]\+\)$/\1/')
 		if [ "x$OLDPREFIX" != "x$PREFIX" ]; then
 			echo "$PREFIX-1"
 		else
