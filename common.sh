@@ -3,7 +3,7 @@ function setupjq () {
 }
 
 function setupxmlstarlet () {
-  docker pull jakubsacha/docker-xmlstarlet
+  docker pull pnnlmiscscripts/xmlstarlet:1.6.1-2
 }
 
 function jq () {
@@ -11,7 +11,7 @@ function jq () {
 }
 
 function xmlstarlet () {
-  docker run -i --rm jakubsacha/docker-xmlstarlet "$@"
+  docker run -i --rm pnnlmiscscripts/xmlstarlet:1.6.1-2 "$@"
 }
 
 function startregistry () {
