@@ -10,6 +10,10 @@ function jq () {
   docker run -i --rm devorbitus/ubuntu-bash-jq-curl jq "$@"
 }
 
+function skopeo () {
+  docker run -i --rm dquay.io/skopeo/stable "$@"
+}
+
 function xmlstarlet () {
   docker run -i --rm jakubsacha/docker-xmlstarlet "$@"
 }
