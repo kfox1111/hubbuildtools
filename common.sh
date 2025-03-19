@@ -11,7 +11,7 @@ function jq () {
 }
 
 function skopeo () {
-  docker run -i --rm dquay.io/skopeo/stable "$@"
+  docker run -i --rm quay.io/skopeo/stable "$@"
 }
 
 function xmlstarlet () {
